@@ -102,6 +102,32 @@
                     <p>Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl.</p>
                 </div>
             </div>
+
+            <!-- Products Section -->
+            <section class="py-12 bg-gray-50">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-2xl font-bold mb-8">Products & Services</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @if(Model.Products != null && Model.Products.Any())
+                        {
+                            foreach(var item in Model.Products)
+                            {
+                                <div class="bg-white rounded-lg shadow-md overflow-hidden card-hover">
+                                    <img src="@item.ImageUrl" alt="ACME Cloud Platform" class="w-full h-48 object-cover">
+                                    <div class="p-6">
+                                        <h3 class="text-xl font-semibold mb-2">@item.Name</h3>
+                                        <p class="text-gray-600 mb-4">@item.Description</p>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-primary font-bold">@item.Price?.ToString("C")</span>
+                                            <a href="@Model.Website" class="bg-primary hover:bg-yellow-600 text-black font-medium py-2 px-4 rounded-lg transition-colors">Learn More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </section>
             
             <!-- Contact Form -->
             <div>
