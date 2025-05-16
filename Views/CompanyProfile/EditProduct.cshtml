@@ -1,0 +1,98 @@
+@model IAIFWebCatalog.ViewModels.ProductViewModel
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<div class="container py-5">
+    <h1>Edit Product</h1>
+    <p class="text-muted">Update product details for @Model.CompanyName</p>
+    <hr />
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form asp-action="EditProduct" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CompanyId" />
+                        <input type="hidden" asp-for="CompanyName" />
+                        
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Product Name</label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Price" class="form-label">Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="Price" class="form-control" type="number" step="0.01" min="0" />
+                            </div>
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="ImageUrl" class="form-label">Image URL</label>
+                            <input asp-for="ImageUrl" class="form-control" type="url" placeholder="https://" />
+                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                            <small class="form-text text-muted">Enter a URL for your product image</small>
+                        </div>
+                        
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">Update Product</button>
+                            <a asp-action="Products" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Product Preview</h5>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl" class="img-fluid mb-3 rounded" alt="@Model.Name" />
+                    }
+                    else
+                    {
+                        <div class="bg-light p-5 text-center mb-3 rounded">
+                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                            <p class="mt-2 text-muted">No image available</p>
+                        </div>
+                    }
+                    
+                    <h5>@Model.Name</h5>
+                    <p class="text-primary fw-bold">$@Model.Price?.ToString("F2")</p>
+                    <p class="text-muted small">
+                        @(Model.Description?.Length > 100 
+                            ? Model.Description.Substring(0, 100) + "..." 
+                            : Model.Description)
+                    </p>
+                </div>
+                <div class="card-footer bg-light">
+                    <a asp-action="DeleteProduct" asp-route-id="@Model.Id" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-trash"></i> Delete Product
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

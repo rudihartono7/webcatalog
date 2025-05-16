@@ -1,0 +1,47 @@
+@model IAIFWebCatalog.Models.Category
+@{
+    ViewData["Title"] = Model.Name;
+    var companies = ViewData["Companies"] as List<IAIFWebCatalog.Models.Company>;
+}
+
+<div class="bg-white py-16">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <div class="inline-block p-4 rounded-full @Model.BackgroundClass mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 @Model.IconClass" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+            </div>
+            <h1 class="text-4xl font-bold mb-4">@Model.Name</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                @(string.IsNullOrEmpty(Model.Description) 
+                    ? $"Browse all companies in the {Model.Name} category." 
+                    : Model.Description)
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @if (companies != null && companies.Any())
+            {
+                foreach (var company in companies)
+                {
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden card-hover">
+                        <img src="@company.ImageUrl" alt="@company.Name" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">@company.Name</h3>
+                            <p class="text-gray-600 text-sm mb-4">@company.Category</p>
+                            <a asp-controller="Companies" asp-action="Details" asp-route-id="@company.Id" 
+                               class="text-primary hover:text-yellow-600 font-medium">View Profile →</a>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-span-3 text-center py-12">
+                    <p class="text-gray-500 text-lg">No companies found in this category.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

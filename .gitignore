@@ -1,0 +1,36 @@
+# Ignore Visual Studio files
+.vs/
+.vscode/
+*.suo
+*.ntvs*
+*.nupkg
+*.vsix
+
+# Ignore build and debug files
+bin/
+obj/
+Debug/
+Release/
+
+# Ignore NuGet packages
+packages/
+
+# Ignore .NET Core runtime files
+.runtime/
+*.runtimeconfig.json
+
+# Ignore ASP.NET Core files
+
+# Ignore logs
+logs/
+*.log
+
+# Ignore env files
+.env
+
+# Ignore ReSharper and Rider files
+_ReSharper.*
+*.sln.DotSettings.user
+*.csproj.DotSettings.user
+.idea/
+*.csproj.rider

@@ -1,0 +1,93 @@
+@model IAIFWebCatalog.Models.Company
+
+@{
+    ViewData["Title"] = "Manage Products";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Manage Products</h1>
+        <a asp-action="AddProduct" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-2"></i> Add New Product
+        </a>
+    </div>
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">@Model.Name Products</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.Products != null && Model.Products.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Image</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th style="width: 150px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model.Products)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                        {
+                                            <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail" style="max-width: 60px; max-height: 60px;">
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-light text-center rounded" style="width: 60px; height: 60px;">
+                                                <i class="bi bi-image text-muted" style="font-size: 24px; line-height: 60px;"></i>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>@product.Name</td>
+                                    <td>@(product.Description?.Length > 100 ? product.Description.Substring(0, 100) + "..." : product.Description)</td>
+                                    <td>$@product.Price?.ToString("0.00")</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="EditProduct" asp-route-id="@product.Id" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a asp-action="DeleteProduct" asp-route-id="@product.Id" class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-box-seam text-muted" style="font-size: 48px;"></i>
+                    <h4 class="mt-3">No Products Yet</h4>
+                    <p class="text-muted">Start adding products to showcase your offerings</p>
+                    <a asp-action="AddProduct" class="btn btn-primary mt-3">Add Your First Product</a>
+                </div>
+            }
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i> Back to Profile
+        </a>
+    </div>
+</div>

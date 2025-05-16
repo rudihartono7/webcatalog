@@ -1,0 +1,112 @@
+<div class="popup-content bg-white rounded-lg shadow-xl w-full max-w-md">
+    <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-gray-900">Register Your Company</h3>
+            <button id="closeRegistrationBtn" class="text-gray-400 hover:text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <form id="register-form" asp-controller="Account" asp-action="Register" method="post" class="space-y-4">
+            <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm mb-4"></div>
+            
+            <!-- Company Information -->
+            <input type="hidden" name="IsCompanyRegistration" value="true" />
+            
+            <!-- Company Name -->
+            <div>
+                <label for="Company_Name" class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                <input type="text" id="Company_Name" name="Company.Name" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                <span asp-validation-for="Company.Name" class="text-red-500 text-sm"></span>
+            </div>
+            
+            <!-- Company Size -->
+            <div>
+                <label for="Company_EmployeeCount" class="block text-sm font-medium text-gray-700 mb-1">Company Size</label>
+                <select id="Company_EmployeeCount" name="Company.EmployeeCount" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option value="" disabled selected>Select company size</option>
+                    <option value="1-10">1-10 employees</option>
+                    <option value="11-50">11-50 employees</option>
+                    <option value="51-200">51-200 employees</option>
+                    <option value="201-500">201-500 employees</option>
+                    <option value="501-1000">501-1000 employees</option>
+                    <option value="1000+">1000+ employees</option>
+                </select>
+                <span asp-validation-for="Company.EmployeeCount" class="text-red-500 text-sm"></span>
+            </div>
+            
+            <!-- User Information -->
+            <!-- First Name -->
+            <div>
+                <label for="FirstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                <input type="text" id="FirstName" name="FirstName" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                <span asp-validation-for="FirstName" class="text-red-500 text-sm"></span>
+            </div>
+            
+            <!-- Last Name -->
+            <div>
+                <label for="LastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                <input type="text" id="LastName" name="LastName" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                <span asp-validation-for="LastName" class="text-red-500 text-sm"></span>
+            </div>
+            
+            <!-- Email Address -->
+            <div>
+                <label for="Email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <input type="email" id="Email" name="Email" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
+            </div>
+            
+            <!-- Password -->
+            <div>
+                <label for="Password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input type="password" id="Password" name="Password" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                <span asp-validation-for="Password" class="text-red-500 text-sm"></span>
+            </div>
+            
+            <!-- Confirm Password -->
+            <div>
+                <label for="ConfirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                <input type="password" id="ConfirmPassword" name="ConfirmPassword" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                <span asp-validation-for="ConfirmPassword" class="text-red-500 text-sm"></span>
+            </div>
+            
+            <!-- Terms and Conditions -->
+            <div class="flex items-start">
+                <input type="checkbox" id="AcceptTerms" name="AcceptTerms" required
+                       class="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                <label for="AcceptTerms" class="ml-2 block text-sm text-gray-700">
+                    I agree to the <a asp-controller="Home" asp-action="Terms" class="text-primary hover:text-yellow-600">Terms and Conditions</a>
+                </label>
+            </div>
+            
+            <!-- Anti-forgery token -->
+            @Html.AntiForgeryToken()
+            
+            <!-- Submit Button -->
+            <div>
+                <button type="submit" 
+                        class="w-full bg-primary text-black font-bold py-2 px-4 rounded-md hover:bg-yellow-600 transition-colors">
+                    Register
+                </button>
+            </div>
+            
+            <!-- Login Link -->
+            <div class="text-center mt-4">
+                <p class="text-sm text-gray-600">
+                    Already have an account? 
+                    <a asp-controller="Account" asp-action="Login" class="text-primary hover:text-yellow-600">Login here</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>

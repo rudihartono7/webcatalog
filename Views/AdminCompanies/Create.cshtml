@@ -1,0 +1,107 @@
+@model IAIFWebCatalog.Models.Company
+
+@{
+    ViewData["Title"] = "Create Company";
+    Layout = "_Layout";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold">Create Company</h1>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="col-span-2">
+                    <label asp-for="Name" class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                    <input asp-for="Name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                    <span asp-validation-for="Name" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="Category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select asp-for="Category" asp-items="ViewBag.Categories" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                        <option value="">-- Select Category --</option>
+                    </select>
+                    <span asp-validation-for="Category" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="IndustryId" class="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+                    <select asp-for="IndustryId" asp-items="ViewBag.IndustryId" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                        <option value="">-- Select Industry --</option>
+                    </select>
+                    <span asp-validation-for="IndustryId" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div class="col-span-2">
+                    <label asp-for="Description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea asp-for="Description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"></textarea>
+                    <span asp-validation-for="Description" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="ImageUrl" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+                    <input asp-for="ImageUrl" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                    <span asp-validation-for="ImageUrl" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="Website" class="block text-sm font-medium text-gray-700 mb-1">Website</label>
+                    <input asp-for="Website" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                    <span asp-validation-for="Website" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="Email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input asp-for="Email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                    <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="Phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                    <input asp-for="Phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                    <span asp-validation-for="Phone" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="Address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                    <input asp-for="Address" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                    <span asp-validation-for="Address" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="FoundedYear" class="block text-sm font-medium text-gray-700 mb-1">Founded Year</label>
+                    <input asp-for="FoundedYear" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                    <span asp-validation-for="FoundedYear" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="EmployeeCount" class="block text-sm font-medium text-gray-700 mb-1">Employee Count</label>
+                    <select asp-for="EmployeeCount" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                        <option value="">-- Select Range --</option>
+                        <option value="1-10">1-10</option>
+                        <option value="11-50">11-50</option>
+                        <option value="51-200">51-200</option>
+                        <option value="201-500">201-500</option>
+                        <option value="501-1000">501-1000</option>
+                        <option value="1000+">1000+</option>
+                    </select>
+                    <span asp-validation-for="EmployeeCount" class="text-red-500 text-sm"></span>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between mt-8">
+                <a asp-action="Index" class="text-gray-600 hover:text-gray-900">Back to List</a>
+                <button type="submit" class="bg-primary text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

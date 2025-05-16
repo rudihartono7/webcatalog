@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - IAIF Web Catalog</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ganti referensi heroicons yang bermasalah -->
+    <script src="https://unpkg.com/heroicons@2.0.18/dist/heroicons.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#F9C511', // Yellow primary color
+                        secondary: '#000000', // Black secondary color
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles */
+        .hero-gradient {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+        
+        .scrollbar-hide {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari and Opera */
+        }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header/Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a asp-controller="Home" asp-action="Index" class="flex items-center">
+                        <span class="text-2xl font-bold text-primary">IAIF</span>
+                        <span class="text-xl font-medium ml-1">Web Catalog</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a asp-controller="Home" asp-action="Index" class="text-gray-600 hover:text-primary transition-colors">Home</a>
+                    <a asp-controller="Categories" asp-action="Index" class="text-gray-600 hover:text-primary transition-colors">Categories</a>
+                    <a asp-controller="Companies" asp-action="Index" class="text-gray-600 hover:text-primary transition-colors">Companies</a>
+                    <a asp-controller="Home" asp-action="Contact" class="text-gray-600 hover:text-primary transition-colors">Contact</a>
+                    
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Admin" asp-action="Index" class="text-primary font-medium hover:text-yellow-600 transition-colors">Admin Dashboard</a>
+                        }
+                        else if (User.IsInRole("CompanyAdmin"))
+                        {
+                            <a asp-controller="Account" asp-action="Profile" class="text-primary font-medium hover:text-yellow-600 transition-colors">Company Profile</a>
+                        }
+                        
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
+                            <button type="submit" class="text-gray-600 hover:text-primary transition-colors">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="text-gray-600 hover:text-primary transition-colors">Login</a>
+                        <a asp-controller="Home" asp-action="RegisterCompany" class="bg-primary text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors register-company-btn">Register</a>
+                    }
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button type="button" id="mobileMenuBtn" class="text-gray-600 hover:text-primary focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-3">
+                <nav class="flex flex-col space-y-3">
+                    <a asp-controller="Home" asp-action="Index" class="text-gray-600 hover:text-primary transition-colors py-2">Home</a>
+                    <a asp-controller="Categories" asp-action="Index" class="text-gray-600 hover:text-primary transition-colors py-2">Categories</a>
+                    <a asp-controller="Companies" asp-action="Index" class="text-gray-600 hover:text-primary transition-colors py-2">Companies</a>
+                    <a asp-controller="Home" asp-action="Contact" class="text-gray-600 hover:text-primary transition-colors py-2">Contact</a>
+                    
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Admin" asp-action="Index" class="text-primary font-medium hover:text-yellow-600 transition-colors py-2">Admin Dashboard</a>
+                        }
+                        else if (User.IsInRole("CompanyAdmin"))
+                        {
+                            <a asp-controller="Account" asp-action="Profile" class="text-primary font-medium hover:text-yellow-600 transition-colors py-2">Company Profile</a>
+                        }
+                        
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
+                            <button type="submit" class="text-gray-600 hover:text-primary transition-colors py-2 w-full text-left">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="text-gray-600 hover:text-primary transition-colors py-2">Login</a>
+                        <button class="text-gray-600 hover:text-primary transition-colors py-2 text-left register-company-btn">Register</button>
+                    }
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Column 1 - About -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">IAIF Web Catalog</h3>
+                    <p class="text-gray-400 mb-4">Your comprehensive business directory connecting companies with potential customers.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Column 2 - Quick Links -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a asp-controller="Home" asp-action="Index" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a asp-controller="Categories" asp-action="Index" class="text-gray-400 hover:text-primary transition-colors">Categories</a></li>
+                        <li><a asp-controller="Companies" asp-action="Index" class="text-gray-400 hover:text-primary transition-colors">Companies</a></li>
+                        <li><a asp-controller="Home" asp-action="Contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3 - Legal -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4 - Newsletter -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for the latest updates.</p>
+                    <form asp-controller="Home" asp-action="Subscribe" method="post" class="flex">
+                        <input type="email" name="email" placeholder="Your email" class="px-4 py-2 w-full rounded-l-lg focus:outline-none text-gray-900">
+                        <button type="submit" class="bg-primary text-black px-4 py-2 rounded-r-lg hover:bg-yellow-600 transition-colors">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; @DateTime.Now.Year IAIF Web Catalog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Registration Popup -->
+    @if (TempData["ShowRegistrationPopup"] == null || !(bool)TempData["ShowRegistrationPopup"])
+    {
+        <div id="registrationPopup" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+            <!-- <partial name="_RegistrationPopup" /> -->
+        </div>
+    }
+    else
+    {
+        <div id="registrationPopup" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+            <!-- <partial name="_RegistrationPopup" /> -->
+        </div>
+    }
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // Registration popup functionality
+            const registrationPopup = document.getElementById('registrationPopup');
+            const closeRegistrationBtn = document.getElementById('closeRegistrationBtn');
+            
+            if (registrationPopup && closeRegistrationBtn) {
+                // Close registration popup
+                closeRegistrationBtn.addEventListener('click', function() {
+                    registrationPopup.classList.add('hidden');
+                    document.body.style.overflow = ''; // Re-enable scrolling when popup is closed
+                    
+                    // Set a cookie to remember that the user closed the popup
+                    document.cookie = "registrationPopupClosed=true; max-age=604800; path=/";
+                });
+                
+                // Check if the popup has been closed before
+                function getCookie(name) {
+                    const value = `; ${document.cookie}`;
+                    const parts = value.split(`; ${name}=`);
+                    if (parts.length === 2) return parts.pop().split(';').shift();
+                }
+                
+                // If the user has closed the popup before, keep it hidden
+                if (getCookie('registrationPopupClosed')) {
+                    registrationPopup.classList.add('hidden');
+                }
+            }
+            
+            // Advanced filter popup functionality (only on search page)
+            const advancedFilterBtn = document.getElementById('advancedFilterBtn');
+            const closeFilterBtn = document.getElementById('closeFilterBtn');
+            const resetFilterBtn = document.getElementById('resetFilterBtn');
+            const advancedFilterPopup = document.getElementById('advancedFilterPopup');
+            
+            if (advancedFilterBtn && closeFilterBtn && resetFilterBtn && advancedFilterPopup) {
+                // Open filter popup
+                advancedFilterBtn.addEventListener('click', function() {
+                    advancedFilterPopup.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling when popup is open
+                });
+                
+                // Close filter popup
+                closeFilterBtn.addEventListener('click', function() {
+                    advancedFilterPopup.classList.add('hidden');
+                    document.body.style.overflow = ''; // Re-enable scrolling
+                });
+                
+                // Reset filter form
+                resetFilterBtn.addEventListener('click', function() {
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    const selects = document.querySelectorAll('select');
+                    const inputs = document.querySelectorAll('input[type="text"]');
+                    
+                    // Reset checkboxes
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                    
+                    // Reset selects
+                    selects.forEach(select => {
+                        select.selectedIndex = 0;
+                    });
+                    
+                    // Reset text inputs
+                    inputs.forEach(input => {
+                        input.value = '';
+                    });
+                });
+                
+                // Close popup when clicking outside
+                advancedFilterPopup.addEventListener('click', function(e) {
+                    if (e.target === advancedFilterPopup) {
+                        advancedFilterPopup.classList.add('hidden');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

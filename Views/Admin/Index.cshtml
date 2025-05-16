@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="bg-white py-16">
+    <div class="container mx-auto px-4">
+        <h1 class="text-3xl font-bold mb-8">Admin Dashboard</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                <h2 class="text-xl font-bold mb-4">Categories</h2>
+                <p class="text-gray-600 mb-4">Manage categories for companies.</p>
+                <a asp-controller="AdminCategories" asp-action="Index" 
+                   class="inline-block bg-primary text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">
+                    Manage Categories
+                </a>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                <h2 class="text-xl font-bold mb-4">Industries</h2>
+                <p class="text-gray-600 mb-4">Manage industries for companies.</p>
+                <a asp-controller="AdminIndustries" asp-action="Index" 
+                   class="inline-block bg-primary text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">
+                    Manage Industries
+                </a>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                <h2 class="text-xl font-bold mb-4">Companies</h2>
+                <p class="text-gray-600 mb-4">Manage all companies in the catalog.</p>
+                <a asp-controller="AdminCompanies" asp-action="Index" 
+                   class="inline-block bg-primary text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">
+                    Manage Companies
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

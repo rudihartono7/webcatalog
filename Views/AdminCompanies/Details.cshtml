@@ -1,0 +1,131 @@
+@model IAIFWebCatalog.Models.Company
+
+@{
+    ViewData["Title"] = "Company Details";
+    Layout = "_Layout";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold">@Model.Name</h1>
+        <p class="text-gray-600">@Model.Category</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Company Details -->
+        <div class="lg:col-span-2">
+            <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+                <h2 class="text-xl font-bold mb-4">Company Details</h2>
+                <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="col-span-2">
+                        <dt class="text-sm font-medium text-gray-500">Description</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@Model.Description</dd>
+                    </div>
+                    
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Industry</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@(Model.Industry?.Name ?? "N/A")</dd>
+                    </div>
+                    
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Founded</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@(Model.FoundedYear > 0 ? Model.FoundedYear.ToString() : "N/A")</dd>
+                    </div>
+                    
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Employees</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@(Model.EmployeeCount ?? "N/A")</dd>
+                    </div>
+                    
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Website</dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            @if (!string.IsNullOrEmpty(Model.Website))
+                            {
+                                <a href="@Model.Website" target="_blank" class="text-blue-600 hover:text-blue-800">@Model.Website</a>
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </dd>
+                    </div>
+                    
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Email</dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            @if (!string.IsNullOrEmpty(Model.Email))
+                            {
+                                <a href="mailto:@Model.Email" class="text-blue-600 hover:text-blue-800">@Model.Email</a>
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </dd>
+                    </div>
+                    
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Phone</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@(Model.Phone ?? "N/A")</dd>
+                    </div>
+                    
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Address</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@(Model.Address ?? "N/A")</dd>
+                    </div>
+                </dl>
+            </div>
+            
+            <!-- Products -->
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold">Products</h2>
+                    <a asp-action="AddProduct" asp-route-id="@Model.Id" class="bg-primary text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">Add Product</a>
+                </div>
+                
+                @if (Model.Products != null && Model.Products.Any())
+                {
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach (var product in Model.Products)
+                        {
+                            <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <h3 class="font-semibold text-lg mb-2">@product.Name</h3>
+                                <p class="text-gray-600 text-sm mb-2">@product.Description</p>
+                                @if (product.Price.HasValue)
+                                {
+                                    <p class="text-primary font-medium">@product.Price.Value.ToString("C")</p>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-gray-500">No products available.</p>
+                }
+            </div>
+        </div>
+        
+        <!-- Company Image -->
+        <div class="lg:col-span-1">
+            <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="@Model.Name" class="w-full h-auto rounded-lg mb-4">
+                }
+                else
+                {
+                    <div class="bg-gray-200 w-full h-48 rounded-lg flex items-center justify-center mb-4">
+                        <span class="text-gray-500">No image available</span>
+                    </div>
+                }
+                
+                <div class="flex justify-between mt-4">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">Edit</a>
+                    <a asp-action="Index" class="text-gray-600 hover:text-gray-900">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
