@@ -3,16 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 using IAIFWebCatalog.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using IAIFWebCatalog.Services;
 
 namespace IAIFWebCatalog.Controllers
 {
     public class CompaniesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly AzureStorageService _azureStorageService;
 
-        public CompaniesController(ApplicationDbContext context)
+        public CompaniesController(ApplicationDbContext context, AzureStorageService azureStorageService)
         {
             _context = context;
+            _azureStorageService = azureStorageService;
         }
 
         public async Task<IActionResult> Index()
@@ -22,6 +25,8 @@ namespace IAIFWebCatalog.Controllers
                 .Include(c => c.Industry)
                 .ToListAsync();
             
+            ViewData["Categories"] = await _context.Categories.ToListAsync();
+            ViewData["Industries"] = await _context.Industries.ToListAsync();
             return View(companies);
         }
 
@@ -43,7 +48,7 @@ namespace IAIFWebCatalog.Controllers
             // Companies in the same category or industry
             var relatedCompanies = await _context.Companies
                 .Where(c => (c.CategoryId == company.CategoryId || c.IndustryId == company.IndustryId) && c.Id != company.Id)
-                .Take(3)
+                .Take(4)
                 .ToListAsync();
             
             ViewData["RelatedCompanies"] = relatedCompanies;

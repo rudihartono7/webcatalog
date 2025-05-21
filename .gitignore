@@ -34,3 +34,7 @@ _ReSharper.*
 *.csproj.DotSettings.user
 .idea/
 *.csproj.rider
+appsettings.json
+appsettings.json.backup
+appsettings.Development.json
+appsettings.Development.json.backup

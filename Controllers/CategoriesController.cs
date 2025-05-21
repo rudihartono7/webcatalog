@@ -40,9 +40,11 @@ namespace IAIFWebCatalog.Controllers
                 return NotFound();
             }
             
-            // Get companies in this category
+            // Get companies in this category with more details
             var companies = await _context.Companies
                 .Where(c => c.CategoryId == id)
+                .Include(c => c.Industry)
+                .OrderByDescending(c => c.FoundedYear)
                 .ToListAsync();
             
             ViewData["Companies"] = companies;

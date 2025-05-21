@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 namespace IAIFWebCatalog.Models
 {
     public class Company
@@ -11,7 +12,11 @@ namespace IAIFWebCatalog.Models
         
         public string? Description { get; set; }
         
-        public string? ImageUrl { get; set; }
+        // Replacing ImageUrl with ImageFileName
+        public string? ImageFileName { get; set; }
+        
+        // New field for company profile PDF
+        public string? ProfilePdfFileName { get; set; }
         
         public string? Address { get; set; }
         
@@ -46,6 +51,11 @@ namespace IAIFWebCatalog.Models
         
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }
+        
+        // Add this property to your Company model
+        public string? BrochureUrl { get; set; }
+
+        public string? ImageUrl { get; set; }
     }
     
     public class TeamMember

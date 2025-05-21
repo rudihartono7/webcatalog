@@ -9,13 +9,14 @@ namespace IAIFWebCatalog.Controllers
     public class SearchController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private const int PageSize = 10; // Number of items per page
 
         public SearchController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string query, string category, string industry, string sortBy)
+        public async Task<IActionResult> Index(string query, string category, string industry, string size, string sortBy, int page = 1)
         {
             // Initialize an empty list for results
             var results = new List<Company>();
@@ -46,22 +47,75 @@ namespace IAIFWebCatalog.Controllers
                     .ToListAsync();
             }
 
-
             // Filter by category if specified
-            if (category != "all" && !string.IsNullOrEmpty(category))
+            if (!string.IsNullOrEmpty(category) && category != "all")
             {
-                results = results.Where(c => c.Category != null && c.Category.Name.ToLower() == category.ToLower()).ToList();
+                // Check if category contains multiple values (from checkboxes)
+                if (category.Contains(','))
+                {
+                    var categoryValues = category.Split(',');
+                    results = results.Where(c => c.Category != null && 
+                                               categoryValues.Contains(c.Category.Name)).ToList();
+                }
+                else
+                {
+                    // Try to parse as ID first
+                    if (int.TryParse(category, out int categoryId))
+                    {
+                        results = results.Where(c => c.Category != null && c.Category.Id == categoryId).ToList();
+                    }
+                    else
+                    {
+                        // Otherwise filter by name
+                        results = results.Where(c => c.Category != null && 
+                                                  c.Category.Name.ToLower() == category.ToLower()).ToList();
+                    }
+                }
             }
 
+            // Filter by industry if specified
             if (!string.IsNullOrEmpty(industry))
             {
-                results = results.Where(c => c.Industry != null && c.Industry.Name.ToLower() == industry.ToLower()).ToList();
+                results = results.Where(c => c.Industry != null && 
+                                          c.Industry.Name.ToLower() == industry.ToLower()).ToList();
             }
 
-            if (!string.IsNullOrEmpty(sortBy))
+            // Filter by company size if specified
+            /* if (!string.IsNullOrEmpty(size))
             {
-                sortBy = "name-asc";
+                var sizeRanges = size.Split('');
+                results = results.Where(c => {
+                    if (c.EmployeeCount == null) return false;
+                    
+                    foreach (var range in sizeRanges)
+                    {
+                        switch (range)
+                        {
+                            case "1-10":
+                                if (c.EmployeeCount >= 1 && c.EmployeeCount <= 10) return true;
+                                break;
+                            case "11-50":
+                                if (c.EmployeeCount >= 11 && c.EmployeeCount <= 50) return true;
+                                break;
+                            case "51-200":
+                                if (c.EmployeeCount >= 51 && c.EmployeeCount <= 200) return true;
+                                break;
+                            case "201-500":
+                                if (c.EmployeeCount >= 201 && c.EmployeeCount <= 500) return true;
+                                break;
+                            case "501-1000":
+                                if (c.EmployeeCount >= 501 && c.EmployeeCount <= 1000) return true;
+                                break;
+                            case "1000+":
+                                if (c.EmployeeCount > 1000) return true;
+                                break;
+                        }
+                    }
+                    return false;
+                }).ToList();
             }
+            */
+            
 
             // Sort results
             switch (sortBy)
@@ -79,6 +133,19 @@ namespace IAIFWebCatalog.Controllers
                     break;
             }
             
+            // Calculate pagination
+            var totalItems = results.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)PageSize);
+            
+            // Ensure page is within valid range
+            page = Math.Max(1, Math.Min(page, Math.Max(1, totalPages)));
+            
+            // Get the current page of results
+            var pagedResults = results
+                .Skip((page - 1) * PageSize)
+                .Take(PageSize)
+                .ToList();
+            
             var categories = await _context.Categories.ToListAsync();
             var industries = await _context.Industries.ToListAsync();
     
@@ -88,9 +155,13 @@ namespace IAIFWebCatalog.Controllers
             ViewData["Query"] = query;
             ViewData["Category"] = category;
             ViewData["Industry"] = industry;
+            ViewData["Size"] = size;
             ViewData["SortBy"] = sortBy ?? "relevance";
-            ViewData["ResultCount"] = results.Count; 
-            return View(results);
+            ViewData["ResultCount"] = totalItems;
+            ViewData["CurrentPage"] = page;
+            ViewData["TotalPages"] = totalPages;
+            
+            return View(pagedResults);
         }
     }
 }

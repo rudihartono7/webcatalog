@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using IAIFWebCatalog.Data;
 using IAIFWebCatalog.Models;
+using IAIFWebCatalog.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+// Register AzureStorageService
+builder.Services.AddScoped<AzureStorageService>();
 
 // Configure cookie settings
 builder.Services.ConfigureApplicationCookie(options =>

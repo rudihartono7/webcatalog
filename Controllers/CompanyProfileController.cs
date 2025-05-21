@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using IAIFWebCatalog.Services;
 
 namespace IAIFWebCatalog.Controllers
 {
@@ -14,13 +17,96 @@ namespace IAIFWebCatalog.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly AzureStorageService _azureStorageService;
 
-        public CompanyProfileController(
-            UserManager<ApplicationUser> userManager,
-            ApplicationDbContext context)
+        // Update the constructor to inject AzureStorageService
+        public CompanyProfileController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, AzureStorageService azureStorageService)
         {
-            _userManager = userManager;
             _context = context;
+            _userManager = userManager;
+            _azureStorageService = azureStorageService;
+        }
+
+        // Update the Edit POST action method
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Services,Tags,Address,City,Country,Phone,Email,Website,FoundedYear,EmployeeCount,CategoryId,IndustryId,SocialMedia,BrochureUrl,AdminUserId")] Company company, IFormFile CompanyImage, IFormFile CompanyBrochure)
+        {
+            if (id != company.Id)
+            {
+                return NotFound();
+            }
+
+            // Check if the current user is the admin of this company
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null || company.AdminUserId != currentUser.Id)
+            {
+                return Forbid();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Handle company image upload
+                    if (CompanyImage != null && CompanyImage.Length > 0)
+                    {
+                        // Delete old image if exists
+                        if (!string.IsNullOrEmpty(company.ImageUrl))
+                        {
+                            // Extract the file name from the URL
+                            string oldFileName = Path.GetFileName(new Uri(company.ImageUrl).LocalPath);
+                            await _azureStorageService.DeleteFileAsync(oldFileName);
+                        }
+
+                        // Upload new image
+                        using (var stream = CompanyImage.OpenReadStream())
+                        {
+                            string fileName = await _azureStorageService.UploadFileAsync(stream, CompanyImage.FileName, CompanyImage.ContentType);
+                            company.ImageUrl = _azureStorageService.GetBlobUrl(fileName);
+                        }
+                    }
+
+                    // Handle company brochure upload
+                    if (CompanyBrochure != null && CompanyBrochure.Length > 0)
+                    {
+                        // Delete old brochure if exists
+                        if (!string.IsNullOrEmpty(company.BrochureUrl))
+                        {
+                            // Extract the file name from the URL
+                            string oldFileName = Path.GetFileName(new Uri(company.BrochureUrl).LocalPath);
+                            await _azureStorageService.DeleteFileAsync(oldFileName);
+                        }
+
+                        // Upload new brochure
+                        using (var stream = CompanyBrochure.OpenReadStream())
+                        {
+                            string fileName = await _azureStorageService.UploadFileAsync(stream, CompanyBrochure.FileName, CompanyBrochure.ContentType);
+                            company.BrochureUrl = _azureStorageService.GetBlobUrl(fileName);
+                        }
+                    }
+
+                    _context.Update(company);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CompanyExists(company.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name", company.CategoryId);
+            ViewData["Industries"] = new SelectList(_context.Industries, "Id", "Name", company.IndustryId);
+            return View(company);
         }
 
         // GET: CompanyProfile
@@ -73,78 +159,6 @@ namespace IAIFWebCatalog.Controllers
             ViewData["CategoryId"] = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name", company.CategoryId);
             ViewData["IndustryId"] = new SelectList(await _context.Industries.ToListAsync(), "Id", "Name", company.IndustryId);
             
-            return View(company);
-        }
-
-        // POST: CompanyProfile/Edit
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Company company)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            
-            var existingCompany = await _context.Companies
-                .FirstOrDefaultAsync(c => c.AdminUserId == user.Id);
-                
-            if (existingCompany == null)
-            {
-                return NotFound();
-            }
-            
-            // Ensure we're only updating the company owned by the current user
-            if (existingCompany.Id != company.Id)
-            {
-                return Forbid();
-            }
-            
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Update only allowed fields
-                    existingCompany.Name = company.Name;
-                    existingCompany.Description = company.Description;
-                    existingCompany.Address = company.Address;
-                    existingCompany.City = company.City;
-                    existingCompany.Country = company.Country;
-                    existingCompany.Phone = company.Phone;
-                    existingCompany.Email = company.Email;
-                    existingCompany.Website = company.Website;
-                    existingCompany.EmployeeCount = company.EmployeeCount;
-                    existingCompany.FoundedYear = company.FoundedYear;
-                    existingCompany.Services = company.Services;
-                    existingCompany.Tags = company.Tags;
-                    existingCompany.ImageUrl = company.ImageUrl;
-                    existingCompany.CategoryId = company.CategoryId;
-                    existingCompany.IndustryId = company.IndustryId;
-                    existingCompany.SocialMedia = company.SocialMedia;
-                    
-                    _context.Update(existingCompany);
-                    await _context.SaveChangesAsync();
-                    
-                    TempData["SuccessMessage"] = "Company profile updated successfully.";
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CompanyExists(company.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
-            
-            // If we got this far, something failed, redisplay form
-            ViewData["CategoryId"] = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name", company.CategoryId);
-            ViewData["IndustryId"] = new SelectList(await _context.Industries.ToListAsync(), "Id", "Name", company.IndustryId);
             return View(company);
         }
 
@@ -226,10 +240,29 @@ namespace IAIFWebCatalog.Controllers
                 {
                     Name = viewModel.Name,
                     Description = viewModel.Description,
-                    Price = viewModel.Price,
-                    ImageUrl = viewModel.ImageUrl,
-                    CompanyId = company.Id
+                    Price = viewModel.Price ?? 0,
+                    CompanyId = company.Id,
+                    ProductUrl = viewModel.ProductUrl,
+                    UserCategories = string.Join(",", viewModel.SelectedUserCategories),
                 };
+                
+                // Handle image file upload
+                if (viewModel.ImageFile != null && viewModel.ImageFile.Length > 0)
+                {
+                    using (var stream = viewModel.ImageFile.OpenReadStream())
+                    {
+                        string fileName = await _azureStorageService.UploadFileAsync(
+                            stream, 
+                            viewModel.ImageFile.FileName, 
+                            viewModel.ImageFile.ContentType);
+                        product.ImageUrl = _azureStorageService.GetBlobUrl(fileName);
+                    }
+                }
+                else if (!string.IsNullOrEmpty(viewModel.ImageUrl))
+                {
+                    // If no new file but URL provided, keep the existing URL
+                    product.ImageUrl = viewModel.ImageUrl;
+                }
                 
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
@@ -278,9 +311,11 @@ namespace IAIFWebCatalog.Controllers
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
-                ImageUrl = product.ImageUrl,
+                ProductUrl = product.ProductUrl,
                 CompanyId = company.Id,
-                CompanyName = company.Name
+                CompanyName = company.Name,
+                ImageUrl = product.ImageUrl,
+                SelectedUserCategories = product.UserCategories?.Split(',').Select(c => c.Trim()).ToList() ?? new List<string>()
             };
             
             return View(viewModel);
@@ -323,8 +358,32 @@ namespace IAIFWebCatalog.Controllers
                 
                 product.Name = viewModel.Name;
                 product.Description = viewModel.Description;
-                product.Price = viewModel.Price;
-                product.ImageUrl = viewModel.ImageUrl;
+                product.Price = viewModel.Price ?? 0;
+                product.ProductUrl = viewModel.ProductUrl;
+                product.UserCategories = viewModel.SelectedUserCategories != null ? string.Join(",", viewModel.SelectedUserCategories) : null;
+                
+                // Handle image file upload
+                if (viewModel.ImageFile != null && viewModel.ImageFile.Length > 0)
+                {
+                    // Delete old image if exists
+                    if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        // Extract the file name from the URL
+                        string oldFileName = Path.GetFileName(new Uri(product.ImageUrl).LocalPath);
+                        await _azureStorageService.DeleteFileAsync(oldFileName);
+                    }
+                    
+                    // Upload new image
+                    using (var stream = viewModel.ImageFile.OpenReadStream())
+                    {
+                        string fileName = await _azureStorageService.UploadFileAsync(
+                            stream, 
+                            viewModel.ImageFile.FileName, 
+                            viewModel.ImageFile.ContentType);
+                        product.ImageUrl = _azureStorageService.GetBlobUrl(fileName);
+                    }
+                }
+                // If no new file uploaded, keep the existing ImageUrl
                 
                 try
                 {

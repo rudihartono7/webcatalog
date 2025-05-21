@@ -3,8 +3,12 @@
     ViewData["Title"] = "Search Results";
     var query = ViewData["Query"] as string;
     var category = ViewData["Category"] as string;
+    var industry = ViewData["Industry"] as string;
+    var size = ViewData["Size"] as string;
     var sortBy = ViewData["SortBy"] as string;
     var resultCount = (int)ViewData["ResultCount"];
+    var currentPage = (int)ViewData["CurrentPage"];
+    var totalPages = (int)ViewData["TotalPages"];
     var categories = ViewData["Categories"] as List<IAIFWebCatalog.Models.Category>;
     var industries = ViewData["Industries"] as List<IAIFWebCatalog.Models.Industry>;
 }
@@ -37,6 +41,8 @@
                 <form id="categoryFilterForm" asp-controller="Search" asp-action="Index" method="get" class="inline">
                     <input type="hidden" name="query" value="@query">
                     <input type="hidden" name="sortBy" value="@sortBy">
+                    <input type="hidden" name="industry" value="@industry">
+                    <input type="hidden" name="size" value="@size">
                     <select name="category" onchange="document.getElementById('categoryFilterForm').submit()" 
                             class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
                         <option value="all">All Categories</option>
@@ -65,6 +71,9 @@
                 <form id="sortForm" asp-controller="Search" asp-action="Index" method="get" class="inline">
                     <input type="hidden" name="query" value="@query">
                     <input type="hidden" name="category" value="@category">
+                    <input type="hidden" name="industry" value="@industry">
+                    <input type="hidden" name="size" value="@size">
+                    <input type="hidden" name="page" value="1">
                     <select name="sortBy" onchange="document.getElementById('sortForm').submit()" 
                             class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
                         <option value="relevance">Relevance</option>
@@ -92,6 +101,8 @@
                 
                 <form asp-controller="Search" asp-action="Index" method="get">
                     <input type="hidden" name="query" value="@query">
+                    <input type="hidden" name="sortBy" value="@sortBy">
+                    <input type="hidden" name="page" value="1">
                     
                     <!-- Category Filter -->
                     <div class="mb-6">
@@ -104,7 +115,7 @@
                                     <label class="flex items-center space-x-2">
                                         <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" 
                                                name="category" value="@cat.Name" 
-                                               @(category != null && category.Split(',').Contains(cat.Id.ToString()) ? "checked" : "")>
+                                               @(category != null && category.Split(',').Contains(cat.Name) ? "checked" : "")>
                                         <span>@cat.Name</span>
                                     </label>
                                 }
@@ -119,9 +130,9 @@
                             <option value="">All Industries</option>
                             @if (industries != null)
                             {
-                                @foreach (var industry in industries)
+                                @foreach (var ind in industries)
                                 {
-                                    <option value="@industry.Name">@industry.Name</option>
+                                    <option value="@ind.Name">@ind.Name</option>
                                 }
                             }
                         </select>
@@ -131,28 +142,37 @@
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2">Company Size</label>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            @{
+                                var sizeRanges = size?.Split(',') ?? new string[0];
+                            }
                             <label class="flex items-center space-x-2">
-                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" name="size" value="1-10">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" 
+                                       name="size" value="1-10" @(sizeRanges.Contains("1-10") ? "checked" : "")>
                                 <span>1-10 employees</span>
                             </label>
                             <label class="flex items-center space-x-2">
-                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" name="size" value="11-50">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" 
+                                       name="size" value="11-50" @(sizeRanges.Contains("11-50") ? "checked" : "")>
                                 <span>11-50 employees</span>
                             </label>
                             <label class="flex items-center space-x-2">
-                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" name="size" value="51-200">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" 
+                                       name="size" value="51-200" @(sizeRanges.Contains("51-200") ? "checked" : "")>
                                 <span>51-200 employees</span>
                             </label>
                             <label class="flex items-center space-x-2">
-                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" name="size" value="201-500">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" 
+                                       name="size" value="201-500" @(sizeRanges.Contains("201-500") ? "checked" : "")>
                                 <span>201-500 employees</span>
                             </label>
                             <label class="flex items-center space-x-2">
-                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" name="size" value="501-1000">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" 
+                                       name="size" value="501-1000" @(sizeRanges.Contains("501-1000") ? "checked" : "")>
                                 <span>501-1000 employees</span>
                             </label>
                             <label class="flex items-center space-x-2">
-                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" name="size" value="1000+">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary" 
+                                       name="size" value="1000+" @(sizeRanges.Contains("1000+") ? "checked" : "")>
                                 <span>1000+ employees</span>
                             </label>
                         </div>
@@ -194,19 +214,12 @@
                                         <h3 class="text-xl font-semibold mb-2">@company.Name</h3>
                                         <p class="text-gray-600 mb-3">@company.Description</p>
                                         <div class="flex flex-wrap gap-2 mb-4">
-                                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">@company.Category</span>
-                                            @if (company.Tags != null && company.Tags.Any())
+                                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">@(company.Category?.Name ?? "Uncategorized")</span>
+                                            @if (!string.IsNullOrEmpty(company.Tags))
                                             {
-                                                @foreach (var tag in company.Tags.Take(2))
+                                                @foreach (var tag in company.Tags.Split(',').Take(2))
                                                 {
                                                     <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">@tag</span>
-                                                }
-                                            }
-                                            @if (company.SocialMedia != null && company.SocialMedia.Any())
-                                            {
-                                                @foreach (var tag in company.SocialMedia.Keys.Take(2))
-                                                {
-                                                    <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">@tag</span>
                                                 }
                                             }
                                         </div>
@@ -240,25 +253,59 @@
             </div>
             
             <!-- Pagination -->
-            <div class="mt-12 flex justify-center">
-                <nav class="inline-flex rounded-md shadow">
-                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 rounded-l-md text-gray-700 hover:bg-gray-50">
-                        Previous
-                    </a>
-                    <a href="#" class="py-2 px-4 bg-primary text-black border border-primary">
-                        1
-                    </a>
-                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
-                        2
-                    </a>
-                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
-                        3
-                    </a>
-                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 rounded-r-md text-gray-700 hover:bg-gray-50">
-                        Next
-                    </a>
-                </nav>
-            </div>
+            @if (totalPages > 1)
+            {
+                <div class="mt-12 flex justify-center">
+                    <nav class="inline-flex rounded-md shadow">
+                        @{
+                            var prevPage = Math.Max(1, currentPage - 1);
+                            var nextPage = Math.Min(totalPages, currentPage + 1);
+                            
+                            // Create query string for pagination links
+                            var queryParams = new Dictionary<string, string>();
+                            if (!string.IsNullOrEmpty(query)) queryParams.Add("query", query);
+                            if (!string.IsNullOrEmpty(category)) queryParams.Add("category", category);
+                            if (!string.IsNullOrEmpty(industry)) queryParams.Add("industry", industry);
+                            if (!string.IsNullOrEmpty(size)) queryParams.Add("size", size);
+                            if (!string.IsNullOrEmpty(sortBy)) queryParams.Add("sortBy", sortBy);
+                            
+                            string GetPageUrl(int pageNum)
+                            {
+                                var pageParams = new Dictionary<string, string>(queryParams);
+                                pageParams["page"] = pageNum.ToString();
+                                return Url.Action("Index", "Search", pageParams);
+                            }
+                        }
+                        
+                        <a href="@GetPageUrl(prevPage)" class="py-2 px-4 bg-white border border-gray-300 rounded-l-md text-gray-700 hover:bg-gray-50 @(currentPage == 1 ? "pointer-events-none opacity-50" : "")">
+                            Previous
+                        </a>
+                        
+                        @{
+                            // Display a reasonable number of page links
+                            const int maxPageLinks = 5;
+                            int startPage = Math.Max(1, currentPage - (maxPageLinks / 2));
+                            int endPage = Math.Min(totalPages, startPage + maxPageLinks - 1);
+                            
+                            if (endPage - startPage + 1 < maxPageLinks)
+                            {
+                                startPage = Math.Max(1, endPage - maxPageLinks + 1);
+                            }
+                            
+                            for (int i = startPage; i <= endPage; i++)
+                            {
+                                <a href="@GetPageUrl(i)" class="py-2 px-4 @(i == currentPage ? "bg-primary text-black border border-primary" : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50")">
+                                    @i
+                                </a>
+                            }
+                        }
+                        
+                        <a href="@GetPageUrl(nextPage)" class="py-2 px-4 bg-white border border-gray-300 rounded-r-md text-gray-700 hover:bg-gray-50 @(currentPage == totalPages ? "pointer-events-none opacity-50" : "")">
+                            Next
+                        </a>
+                    </nav>
+                </div>
+            }
         }
         else
         {
@@ -278,23 +325,61 @@
 
 @section Scripts {
     <script>
-        // Add this to your existing JavaScript
-    document.addEventListener('DOMContentLoaded', function() {
-        const resetFilterBtn = document.getElementById('resetFilterBtn');
-        
-        if (resetFilterBtn) {
-            resetFilterBtn.addEventListener('click', function() {
-                // Reset all checkboxes
-                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                    checkbox.checked = false;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set selected values in dropdowns based on current filters
+            const sortBySelect = document.querySelector('select[name="sortBy"]');
+            if (sortBySelect) {
+                sortBySelect.value = '@sortBy';
+            }
+            
+            const categorySelect = document.querySelector('select[name="category"]');
+            if (categorySelect) {
+                categorySelect.value = '@category';
+            }
+            
+            // Advanced filter popup functionality
+            const advancedFilterBtn = document.getElementById('advancedFilterBtn');
+            const closeFilterBtn = document.getElementById('closeFilterBtn');
+            const resetFilterBtn = document.getElementById('resetFilterBtn');
+            const advancedFilterPopup = document.getElementById('advancedFilterPopup');
+            
+            if (advancedFilterBtn && closeFilterBtn && resetFilterBtn && advancedFilterPopup) {
+                // Open filter popup
+                advancedFilterBtn.addEventListener('click', function() {
+                    advancedFilterPopup.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling when popup is open
                 });
                 
-                // Reset all select elements
-                document.querySelectorAll('select').forEach(select => {
-                    select.selectedIndex = 0;
+                // Close filter popup
+                closeFilterBtn.addEventListener('click', function() {
+                    advancedFilterPopup.classList.add('hidden');
+                    document.body.style.overflow = ''; // Re-enable scrolling
                 });
-            });
-        }
-    });
+                
+                // Reset filter form
+                resetFilterBtn.addEventListener('click', function() {
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    const selects = document.querySelectorAll('select');
+                    
+                    // Reset checkboxes
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                    
+                    // Reset selects
+                    selects.forEach(select => {
+                        select.selectedIndex = 0;
+                    });
+                });
+                
+                // Close popup when clicking outside
+                advancedFilterPopup.addEventListener('click', function(e) {
+                    if (e.target === advancedFilterPopup) {
+                        advancedFilterPopup.classList.add('hidden');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+        });
     </script>
 }

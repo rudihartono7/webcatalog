@@ -5,182 +5,197 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="bg-white py-16">
-    <div class="container mx-auto py-5">
-        <div class="max-w-5xl mx-auto">
-             <h1>Edit Company Profile</h1><hr />
-        </div>
-    </div>
-
-    <div class="mb-8">
-        <form asp-action="Edit" method="post">
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-2">Edit Company Profile</h1>
+    <p class="text-gray-600 mb-6">Update your company information</p>
+    <hr class="mb-6" />
+    
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="AdminUserId" />
         
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Basic Information</h5>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2">
+                <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
+                    <div class="bg-gray-50 px-4 py-3 border-b">
+                        <h5 class="font-medium">Basic Information</h5>
                     </div>
-                    <div class="card-body">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="p-6">
+                        <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
                         
-                        <div class="mb-3">
-                            <label asp-for="Name" class="form-label">Company Name</label>
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="Name" class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                            <input asp-for="Name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                            <span asp-validation-for="Name" class="text-red-500 text-sm"></span>
                         </div>
                         
-                        <div class="mb-3">
-                            <label asp-for="Description" class="form-label">Description</label>
-                            <textarea asp-for="Description" class="form-control" rows="5"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="Description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                            <textarea asp-for="Description" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" rows="5"></textarea>
+                            <span asp-validation-for="Description" class="text-red-500 text-sm"></span>
                         </div>
                         
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="CategoryId" class="form-label">Category</label>
-                                <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label asp-for="CategoryId" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                <select asp-for="CategoryId" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" asp-items="ViewBag.CategoryId">
                                     <option value="">-- Select Category --</option>
                                 </select>
-                                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                                <span asp-validation-for="CategoryId" class="text-red-500 text-sm"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="IndustryId" class="form-label">Industry</label>
-                                <select asp-for="IndustryId" class="form-select" asp-items="ViewBag.IndustryId">
+                            <div>
+                                <label asp-for="IndustryId" class="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+                                <select asp-for="IndustryId" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" asp-items="ViewBag.IndustryId">
                                     <option value="">-- Select Industry --</option>
                                 </select>
-                                <span asp-validation-for="IndustryId" class="text-danger"></span>
+                                <span asp-validation-for="IndustryId" class="text-red-500 text-sm"></span>
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label asp-for="Services" class="form-label">Services</label>
-                            <textarea asp-for="Services" class="form-control" rows="3"></textarea>
-                            <span asp-validation-for="Services" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="Services" class="block text-sm font-medium text-gray-700 mb-1">Services</label>
+                            <textarea asp-for="Services" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" rows="3"></textarea>
+                            <span asp-validation-for="Services" class="text-red-500 text-sm"></span>
                         </div>
                         
-                        <div class="mb-3">
-                            <label asp-for="Tags" class="form-label">Tags (comma separated)</label>
-                            <input asp-for="Tags" class="form-control" placeholder="e.g. technology, software, cloud" />
-                            <span asp-validation-for="Tags" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="Tags" class="block text-sm font-medium text-gray-700 mb-1">Tags (comma separated)</label>
+                            <input asp-for="Tags" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" placeholder="e.g. technology, software, cloud" />
+                            <span asp-validation-for="Tags" class="text-red-500 text-sm"></span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Contact Information</h5>
+                <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
+                    <div class="bg-gray-50 px-4 py-3 border-b">
+                        <h5 class="font-medium">Contact Information</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label">Email</label>
-                            <input asp-for="Email" class="form-control" type="email" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                    <div class="p-6">
+                        <div class="mb-4">
+                            <label asp-for="Email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input asp-for="Email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" type="email" />
+                            <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
                         </div>
                         
-                        <div class="mb-3">
-                            <label asp-for="Phone" class="form-label">Phone</label>
-                            <input asp-for="Phone" class="form-control" />
-                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="Phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                            <input asp-for="Phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                            <span asp-validation-for="Phone" class="text-red-500 text-sm"></span>
                         </div>
                         
-                        <div class="mb-3">
-                            <label asp-for="Website" class="form-label">Website</label>
-                            <input asp-for="Website" class="form-control" type="url" placeholder="https://" />
-                            <span asp-validation-for="Website" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="Website" class="block text-sm font-medium text-gray-700 mb-1">Website</label>
+                            <input asp-for="Website" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" type="url" placeholder="https://" />
+                            <span asp-validation-for="Website" class="text-red-500 text-sm"></span>
                         </div>
                         
-                        <div class="mb-3">
-                            <label asp-for="Address" class="form-label">Address</label>
-                            <input asp-for="Address" class="form-control" />
-                            <span asp-validation-for="Address" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="Address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                            <input asp-for="Address" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                            <span asp-validation-for="Address" class="text-red-500 text-sm"></span>
                         </div>
                         
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="City" class="form-label">City</label>
-                                <input asp-for="City" class="form-control" />
-                                <span asp-validation-for="City" class="text-danger"></span>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label asp-for="City" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                <input asp-for="City" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                                <span asp-validation-for="City" class="text-red-500 text-sm"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Country" class="form-label">Country</label>
-                                <input asp-for="Country" class="form-control" />
-                                <span asp-validation-for="Country" class="text-danger"></span>
+                            <div>
+                                <label asp-for="Country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                                <input asp-for="Country" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" />
+                                <span asp-validation-for="Country" class="text-red-500 text-sm"></span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Company Details</h5>
+            <div class="md:col-span-1">
+                <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
+                    <div class="bg-gray-50 px-4 py-3 border-b">
+                        <h5 class="font-medium">Company Details</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label asp-for="FoundedYear" class="form-label">Founded Year</label>
-                            <input asp-for="FoundedYear" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" />
-                            <span asp-validation-for="FoundedYear" class="text-danger"></span>
+                    <div class="p-6">
+                        <div class="mb-4">
+                            <label asp-for="FoundedYear" class="block text-sm font-medium text-gray-700 mb-1">Founded Year</label>
+                            <input asp-for="FoundedYear" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" type="number" min="1900" max="@DateTime.Now.Year" />
+                            <span asp-validation-for="FoundedYear" class="text-red-500 text-sm"></span>
                         </div>
                         
-                        <div class="mb-3">
-                            <label asp-for="EmployeeCount" class="form-label">Number of Employees</label>
-                            <input asp-for="EmployeeCount" class="form-control" type="number" min="1" />
-                            <span asp-validation-for="EmployeeCount" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="EmployeeCount" class="block text-sm font-medium text-gray-700 mb-1">Number of Employees</label>
+                            <input asp-for="EmployeeCount" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" type="number" min="1" />
+                            <span asp-validation-for="EmployeeCount" class="text-red-500 text-sm"></span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Company Image</h5>
+                <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
+                    <div class="bg-gray-50 px-4 py-3 border-b">
+                        <h5 class="font-medium">Company Image</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label asp-for="ImageUrl" class="form-label">Image URL</label>
-                            <input asp-for="ImageUrl" class="form-control" type="url" />
-                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
-                            <small class="form-text text-muted">Enter a URL for your company logo or image</small>
+                    <div class="p-6">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Company Logo/Image</label>
+                            <input type="file" name="CompanyImage" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" accept="image/*" />
+                            <p class="mt-1 text-sm text-gray-500">Upload a logo or image for your company</p>
+                            
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <div class="mt-3">
+                                    <p class="text-sm text-gray-500 mb-2">Current image:</p>
+                                    <img src="@Model.ImageUrl" alt="Company Logo" class="h-32 object-contain border rounded p-1" />
+                                    <input type="hidden" asp-for="ImageUrl" />
+                                </div>
+                            }
                         </div>
                         
-                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                        {
-                            <div class="text-center mt-3">
-                                <img src="@Model.ImageUrl" alt="Company Image" class="img-fluid rounded" style="max-height: 200px;" />
-                            </div>
-                        }
-                    </div>
-                </div>
-                
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Social Media</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label asp-for="SocialMedia" class="form-label">Social Media Links (comma separated)</label>
-                            <textarea asp-for="SocialMedia" class="form-control" rows="3" placeholder="https://facebook.com/company, https://twitter.com/company"></textarea>
-                            <span asp-validation-for="SocialMedia" class="text-danger"></span>
-                            <small class="form-text text-muted">Enter your social media profile URLs separated by commas</small>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Company Brochure (PDF)</label>
+                            <input type="file" name="CompanyBrochure" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" accept="application/pdf" />
+                            <p class="mt-1 text-sm text-gray-500">Upload a PDF brochure or company profile document</p>
+                            
+                            @if (!string.IsNullOrEmpty(Model.BrochureUrl))
+                            {
+                                <div class="mt-3">
+                                    <p class="text-sm text-gray-500 mb-2">Current brochure:</p>
+                                    <a href="@Model.BrochureUrl" target="_blank" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        View Current Brochure
+                                    </a>
+                                    <input type="hidden" asp-for="BrochureUrl" />
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
                 
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
+                    <div class="bg-gray-50 px-4 py-3 border-b">
+                        <h5 class="font-medium">Social Media</h5>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-4">
+                            <label asp-for="SocialMedia" class="block text-sm font-medium text-gray-700 mb-1">Social Media Links (comma separated)</label>
+                            <textarea asp-for="SocialMedia" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" rows="3" placeholder="https://facebook.com/company, https://twitter.com/company"></textarea>
+                            <span asp-validation-for="SocialMedia" class="text-red-500 text-sm"></span>
+                            <p class="mt-1 text-sm text-gray-500">Enter your social media profile URLs separated by commas</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button type="submit" class="bg-primary text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors flex-grow">Save Changes</button>
+                    <a asp-action="Index" class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">Cancel</a>
                 </div>
             </div>
         </div>
     </form>
-    </div>    
-    
-</div>
 </div>
 
 @section Scripts {

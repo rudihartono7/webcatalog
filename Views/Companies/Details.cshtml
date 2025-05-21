@@ -1,6 +1,7 @@
 @model IAIFWebCatalog.Models.Company
 @{
     ViewData["Title"] = Model.Name;
+    var relatedCompanies = ViewData["RelatedCompanies"] as List<IAIFWebCatalog.Models.Company>;
 }
 
 <div class="bg-white py-16">
@@ -10,10 +11,28 @@
             <div class="flex flex-col md:flex-row items-center md:items-start gap-8 mb-12">
                 <div class="w-full md:w-1/3">
                     <img src="@Model.ImageUrl" alt="@Model.Name" class="w-full h-auto rounded-lg shadow-md">
+                    
+                    @if (!string.IsNullOrEmpty(Model.BrochureUrl))
+                    {
+                        <div class="mt-4">
+                            <a href="@Model.BrochureUrl" target="_blank" class="inline-flex items-center w-full px-4 py-2 bg-primary text-black rounded-md hover:bg-yellow-600 transition-colors justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                Download Company Brochure
+                            </a>
+                        </div>
+                    }
                 </div>
                 <div class="w-full md:w-2/3">
-                    <h1 class="text-3xl font-bold mb-2">@Model.Name</h1>
-                    <p class="text-gray-600 mb-4">@Model.Category</p>
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <h1 class="text-3xl font-bold">@Model.Name</h1>
+                        @if (Model.Industry != null)
+                        {
+                            <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">@Model.Industry.Name</span>
+                        }
+                    </div>
+                    <p class="text-gray-600 mb-4">@Model.Category?.Name</p>
                     <p class="text-gray-800 mb-6">@Model.Description</p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -98,36 +117,71 @@
                 <h2 class="text-2xl font-bold mb-6">About @Model.Name</h2>
                 <div class="prose max-w-none">
                     <p>@Model.Description</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl.</p>
-                    <p>Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl.</p>
                 </div>
             </div>
 
             <!-- Products Section -->
-            <section class="py-12 bg-gray-50">
-                <div class="container mx-auto px-4">
-                    <h2 class="text-2xl font-bold mb-8">Products & Services</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @if(Model.Products != null && Model.Products.Any())
-                        {
-                            foreach(var item in Model.Products)
+            @if(Model.Products != null && Model.Products.Any())
+            {
+                <section class="py-12 bg-gray-50 rounded-lg mb-12">
+                    <div class="px-4">
+                        <h2 class="text-2xl font-bold mb-8">Products & Services</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            @foreach(var item in Model.Products)
                             {
                                 <div class="bg-white rounded-lg shadow-md overflow-hidden card-hover">
-                                    <img src="@item.ImageUrl" alt="ACME Cloud Platform" class="w-full h-48 object-cover">
+                                    <img src="@item.ImageUrl" alt="@item.Name" class="w-full h-48 object-cover">
                                     <div class="p-6">
                                         <h3 class="text-xl font-semibold mb-2">@item.Name</h3>
                                         <p class="text-gray-600 mb-4">@item.Description</p>
+                                        <!-- I need to add tagging display to give information this Products used by  -->
+                                        @if (!string.IsNullOrEmpty(item.UserCategories))
+                                        {
+                                            <div class="flex flex-wrap gap-2 mb-4">
+                                                @foreach(var tag in item.UserCategories.Split(','))
+                                                {
+                                                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">@tag</span>
+                                                }
+                                            </div>
+                                        }
                                         <div class="flex justify-between items-center">
-                                            <span class="text-primary font-bold">@item.Price?.ToString("C")</span>
-                                            <a href="@Model.Website" class="bg-primary hover:bg-yellow-600 text-black font-medium py-2 px-4 rounded-lg transition-colors">Learn More</a>
+                                            <a href="@item.ProductUrl" class="bg-primary hover:bg-yellow-600 text-black font-medium py-2 px-4 rounded-lg transition-colors">Learn More</a>
                                         </div>
                                     </div>
                                 </div>
                             }
+                        </div>
+                    </div>
+                </section>
+            }
+            
+            <!-- Related Companies -->
+            @if(relatedCompanies != null && relatedCompanies.Any())
+            {
+                <section class="mb-12">
+                    <h2 class="text-2xl font-bold mb-6">Related Companies</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        @foreach(var company in relatedCompanies)
+                        {
+                            <div class="bg-white rounded-lg shadow-md overflow-hidden card-hover">
+                                <img src="@company.ImageUrl" alt="@company.Name" class="w-full h-32 object-cover">
+                                <div class="p-4">
+                                    <h3 class="text-lg font-semibold mb-1">@company.Name</h3>
+                                    <div class="flex items-center mb-2">
+                                        <p class="text-gray-600 text-xs mr-2">@company.Category?.Name</p>
+                                        @if (company.Industry != null)
+                                        {
+                                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">@company.Industry.Name</span>
+                                        }
+                                    </div>
+                                    <a asp-controller="Companies" asp-action="Details" asp-route-id="@company.Id" 
+                                       class="text-primary hover:text-yellow-600 text-sm font-medium">View Profile →</a>
+                                </div>
+                            </div>
                         }
                     </div>
-                </div>
-            </section>
+                </section>
+            }
             
             <!-- Contact Form -->
             <div>
