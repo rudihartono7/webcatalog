@@ -4,86 +4,420 @@
 }
 
 <!-- Hero Section -->
-<section class="hero-gradient text-white py-20 md:py-32">
-    <div class="container mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">Discover Companies & Products</h1>
-        <p class="text-xl md:text-2xl mb-8">IAIF Web Catalog - Your Business Directory</p>
-        <div class="max-w-md mx-auto">
-            <div class="relative">
-                <form asp-controller="Search" asp-action="Index" method="get">
-                    <input type="text" name="query" placeholder="Search companies or products..." 
-                           class="w-full px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-primary text-gray-800">
-                    <button type="submit" class="absolute right-1 top-1 bg-primary text-black p-2 rounded-full hover:bg-yellow-600 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </button>
-                </form>
-            </div>
-        </div>
-        <a asp-controller="Categories" asp-action="Index" class="mt-8 inline-block bg-primary text-black font-bold py-3 px-8 rounded-full hover:bg-yellow-600 transition-colors">Explore Now</a>
+<section class="bg-gradient-to-br from-orange-50 to-orange-100 py-16 md:py-24">
+  <div class="container mx-auto px-6">
+    <!-- Judul -->
+    <div class="text-center mb-12">
+      <h1 class="text-3xl md:text-4xl font-bold text-blue-600 mb-4">
+        Jelajah Aplikasi AI Indonesia
+      </h1>
+      <p class="text-gray-500 text-base md:text-lg max-w-2xl mx-auto">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In convallis tortor eros. <br>
+        Donec vitae tortor lacus. Phasellus aliquam ante in maximus.
+      </p>
     </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-10">
+      <div class="bg-orange-50 rounded-3xl p-10 text-center border-4 border-orange-400">
+        <h3 class="text-5xl font-bold text-blue-600 mb-2">1000</h3>
+        <p class="text-gray-500 font-medium">Total Aplikasi</p>
+      </div>
+      <div class="bg-orange-50 rounded-3xl p-10 text-center border-4 border-orange-400">
+        <h3 class="text-5xl font-bold text-blue-600 mb-2">50</h3>
+        <p class="text-gray-500 font-medium">Tim Pengembang</p>
+      </div>
+      <div class="bg-orange-50 rounded-3xl p-10 text-center border-4 border-orange-400">
+        <h3 class="text-5xl font-bold text-blue-600 mb-2">2000</h3>
+        <p class="text-gray-500 font-medium">Record Goal</p>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="max-w-5xl mx-auto">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm font-semibold text-gray-700 uppercase">
+          Progres Guiness World Record
+        </span>
+        <span class="text-sm text-gray-600">1000 Aplikasi Lagi!</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-4">
+        <div class="bg-blue-600 h-4 rounded-full" style="width: 50%"></div>
+      </div>
+      <div class="flex justify-between text-sm text-gray-500 mt-1">
+        <span>1000/2000</span>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Featured Categories -->
+
+<!-- Tema Aplikasi Section -->
 <section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-12">Featured Categories</h2>
-        <div class="relative">
-            <div class="flex overflow-x-auto pb-6 space-x-4 scrollbar-hide">
-                @foreach (var category in Model.FeaturedCategories)
-                {
-                    <div class="flex-shrink-0 w-40 bg-white rounded-lg shadow-md overflow-hidden card-hover">
-                        <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id" class="block p-4 text-center">
-                            <div class="inline-block p-3 rounded-full @category.BackgroundClass mb-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 @category.IconClass" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-semibold">@category.Name</h3>
-                        </a>
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-4">Tema Aplikasi</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante.<br>
+                Donec vitae lorem for lacus. Phasellus aliquam ante in maximus.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <!-- Tema Card 1 -->
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 hover:shadow-lg transition-shadow">
+                <div class="flex items-center mb-4">
+                    <div class="bg-orange-400 rounded-lg p-2">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
                     </div>
-                }
+                </div>
+                <h3 class="text-xl font-bold text-blue-600">Pendidikan</h3>
+            </div>
+            
+            <!-- Tema Card 2 -->
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 hover:shadow-lg transition-shadow">
+                <div class="flex items-center mb-4">
+                    <div class="bg-orange-400 rounded-lg p-2">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-blue-600">Social Life</h3>
+            </div>
+            
+            <!-- Tema Card 3 -->
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 hover:shadow-lg transition-shadow">
+                <div class="flex items-center mb-4">
+                    <div class="bg-orange-400 rounded-lg p-2">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-blue-600">Media Sosial</h3>
+            </div>
+            
+            <!-- Tema Card 4 -->
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 hover:shadow-lg transition-shadow">
+                <div class="flex items-center mb-4">
+                    <div class="bg-orange-400 rounded-lg p-2">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-blue-600">Kesehatan</h3>
+            </div>
+            
+            <!-- Tema Card 5 -->
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 hover:shadow-lg transition-shadow">
+                <div class="flex items-center mb-4">
+                    <div class="bg-orange-400 rounded-lg p-2">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-blue-600">Kuliner</h3>
+            </div>
+            
+            <!-- Tema Card 6 -->
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 hover:shadow-lg transition-shadow">
+                <div class="flex items-center mb-4">
+                    <div class="bg-orange-400 rounded-lg p-2">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-blue-600">Produktifitas</h3>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Featured Companies -->
+<!-- Jelajah Aplikasi AI Section -->
 <section class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-12">Featured Companies</h2>
-        <div class="relative">
-            <div class="flex overflow-x-auto pb-6 scrollbar-hide space-x-6">
-                @foreach (var company in Model.FeaturedCompanies)
-                {
-                    <div class="flex-shrink-0 w-64 bg-white rounded-lg shadow-md overflow-hidden card-hover">
-                        <img src="@company.ImageUrl" alt="@company.Name" class="w-full h-40 object-cover">
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold mb-1">@company.Name</h3>
-                            <p class="text-gray-600 text-sm mb-3">@company.Category?.Name</p>
-                            <a asp-controller="Companies" asp-action="Details" asp-route-id="@company.Id" class="text-primary hover:text-yellow-600 font-medium text-sm">View Profile →</a>
-                        </div>
-                    </div>
-                }
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-4">Jelajah Aplikasi AI Di Sini</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante.<br>
+                Donec vitae lorem for lacus. Phasellus aliquam ante in maximus.
+            </p>
+        </div>
+        
+        <!-- Search and Filter -->
+        <div class="max-w-4xl mx-auto mb-12">
+            <div class="flex flex-col md:flex-row gap-4">
+                <input type="text" placeholder="Tulis Nama Aplikasi" 
+                       class="flex-1 px-6 py-3 rounded-full border-2 border-gray-200 focus:border-blue-500 focus:outline-none">
+                <select class="px-6 py-3 rounded-full border-2 border-gray-200 focus:border-blue-500 focus:outline-none">
+                    <option>Pilih Kategori</option>
+                </select>
+                <button class="bg-blue-600 text-white px-8 py-3 rounded-full font-medium hover:bg-blue-700 transition-colors">
+                    Temukan Aplikasi!
+                </button>
             </div>
+        </div>
+        
+        <!-- Application Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Card 1 -->
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <span class="inline-block bg-blue-100 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full mb-3">Pendidikan</span>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Persiapan Ujian</h3>
+                    <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante BIDIK</p>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs text-gray-500">Riwayat: 5,000+ Percobaan</span>
+                    </div>
+                    <a href="#" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-700">
+                        Buka Aplikasi →
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <span class="inline-block bg-blue-100 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full mb-3">Social Life</span>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Birthday Reminder</h3>
+                    <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante lorem</p>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs text-gray-500">Riwayat: 1,200+ Percobaan</span>
+                    </div>
+                    <a href="#" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-700">
+                        Buka Aplikasi →
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Card 3 -->
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <span class="inline-block bg-blue-100 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full mb-3">Produktifitas</span>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Content Calendar Planner</h3>
+                    <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante Konten Marketing</p>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs text-gray-500">Riwayat: 9,400+ Percobaan</span>
+                    </div>
+                    <a href="#" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-700">
+                        Buka Aplikasi →
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Card 4 -->
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <span class="inline-block bg-blue-100 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full mb-3">Kuliner</span>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Pola Makan Sehat</h3>
+                    <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante Riwayat: 5,000+ Habanero</p>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs text-gray-500">Riwayat: 5,000+ Habanero</span>
+                    </div>
+                    <a href="#" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-700">
+                        Buka Aplikasi →
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Card 5 -->
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <span class="inline-block bg-blue-100 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full mb-3">Produktifitas</span>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Screen Time Manager</h3>
+                    <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante Riwayat: 1,200+ Habanero</p>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs text-gray-500">Riwayat: 1,200+ Habanero</span>
+                    </div>
+                    <a href="#" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-700">
+                        Buka Aplikasi →
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Card 6 -->
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <span class="inline-block bg-blue-100 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full mb-3">Kuliner</span>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Direktori Rumah Makan</h3>
+                    <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante Riwayat: 5,400+ Habanero</p>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs text-gray-500">Riwayat: 5,400+ Habanero</span>
+                    </div>
+                    <a href="#" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-700">
+                        Buka Aplikasi →
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="flex items-center justify-center gap-4 mt-12">
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors">
+                Prev
+            </button>
+            <button class="bg-white border-2 border-blue-600 text-blue-600 w-10 h-10 rounded-full font-medium hover:bg-blue-50 transition-colors">
+                01
+            </button>
+            <button class="bg-orange-400 text-white w-10 h-10 rounded-full font-medium">
+                02
+            </button>
+            <button class="bg-white border-2 border-blue-600 text-blue-600 w-10 h-10 rounded-full font-medium hover:bg-blue-50 transition-colors">
+                03
+            </button>
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors">
+                Next
+            </button>
         </div>
     </div>
 </section>
 
-<!-- Call to Action -->
-<section class="py-16 bg-primary">
-    <div class="container mx-auto px-4 text-center">
-        <h2 class="text-3xl font-bold text-black mb-4">Ready to Join IAIF Web Catalog?</h2>
-        <p class="text-black text-lg mb-8 max-w-2xl mx-auto">List your company in our directory and connect with potential customers and partners.</p>
-        <a asp-controller="Home" asp-action="RegisterCompany" class="bg-black text-white font-bold py-3 px-8 rounded-full hover:bg-gray-800 transition-colors register-company-btn">Register Your Company</a>
+<!-- Publikasi Karya Section -->
+<section class="py-16 bg-gradient-to-br from-blue-50 to-blue-100">
+    <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-4">Publikasi karya Aplikasi AI Anda di Jelajah AI</h2>
+            <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante.<br>
+                Donec vitae lorem for lacus. Phasellus aliquam ante in maximus.
+            </p>
+            <button class="bg-gray-900 text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors">
+                TAMBAH BANK MASALAH
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Bank Masalah Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-4">Bank Masalah</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante.<br>
+                Donec vitae lorem for lacus. Phasellus aliquam ante in maximus.
+            </p>
+        </div>
+        
+        <!-- Bank Masalah Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Bank Card 1 -->
+            <div class="bg-white rounded-2xl border-2 border-gray-200 p-6 hover:shadow-lg transition-shadow">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Persiapan Ujian</h3>
+                <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante BIDIK</p>
+                <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                    <span>Social Media</span>
+                </div>
+                <a href="#" class="text-blue-600 font-medium text-sm hover:text-blue-700">
+                    Lihat Selengkapnya
+                </a>
+            </div>
+            
+            <!-- Bank Card 2 -->
+            <div class="bg-white rounded-2xl border-2 border-gray-200 p-6 hover:shadow-lg transition-shadow">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Caption Generator</h3>
+                <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante lorem</p>
+                <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                    <span>Social Media</span>
+                </div>
+                <a href="#" class="text-blue-600 font-medium text-sm hover:text-blue-700">
+                    Lihat Selengkapnya
+                </a>
+            </div>
+            
+            <!-- Bank Card 3 -->
+            <div class="bg-white rounded-2xl border-2 border-gray-200 p-6 hover:shadow-lg transition-shadow">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Workout Planner</h3>
+                <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante BIDIK</p>
+                <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                    <span>Kesehatan</span>
+                </div>
+                <a href="#" class="text-blue-600 font-medium text-sm hover:text-blue-700">
+                    Lihat Selengkapnya
+                </a>
+            </div>
+            
+            <!-- Bank Card 4 -->
+            <div class="bg-white rounded-2xl border-2 border-gray-200 p-6 hover:shadow-lg transition-shadow">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Resep Masakan</h3>
+                <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante lorem</p>
+                <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                    <span>Kuliner</span>
+                </div>
+                <a href="#" class="text-blue-600 font-medium text-sm hover:text-blue-700">
+                    Lihat Selengkapnya
+                </a>
+            </div>
+            
+            <!-- Bank Card 5 -->
+            <div class="bg-white rounded-2xl border-2 border-gray-200 p-6 hover:shadow-lg transition-shadow">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Sleep Scheduler</h3>
+                <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante lorem</p>
+                <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                    <span>Kesehatan</span>
+                </div>
+                <a href="#" class="text-blue-600 font-medium text-sm hover:text-blue-700">
+                    Lihat Selengkapnya
+                </a>
+            </div>
+            
+            <!-- Bank Card 6 -->
+            <div class="bg-white rounded-2xl border-2 border-gray-200 p-6 hover:shadow-lg transition-shadow">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Content Idea</h3>
+                <p class="text-gray-600 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit nulla eu ante lorem</p>
+                <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                    <span>Social Media</span>
+                </div>
+                <a href="#" class="text-blue-600 font-medium text-sm hover:text-blue-700">
+                    Lihat Selengkapnya
+                </a>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="flex items-center justify-center gap-4 mt-12">
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors">
+                Prev
+            </button>
+            <button class="bg-white border-2 border-blue-600 text-blue-600 w-10 h-10 rounded-full font-medium hover:bg-blue-50 transition-colors">
+                01
+            </button>
+            <button class="bg-orange-400 text-white w-10 h-10 rounded-full font-medium">
+                02
+            </button>
+            <button class="bg-white border-2 border-blue-600 text-blue-600 w-10 h-10 rounded-full font-medium hover:bg-blue-50 transition-colors">
+                03
+            </button>
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors">
+                Next
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-20 bg-gradient-to-br from-orange-100 to-orange-200">
+    <div class="container mx-auto px-6">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-4">Punya Ide Aplikasi?</h2>
+            <h3 class="text-2xl md:text-3xl font-bold text-blue-600 mb-8">Sampaikan Idemu Di Bawah Ini!</h3>
+            <button class="bg-gray-900 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-gray-800 transition-colors shadow-lg">
+                TAMBAH BANK MASALAH
+            </button>
+        </div>
     </div>
 </section>
 
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            
+            // Additional home page specific scripts can go here
         });
     </script>
 }
